@@ -1,0 +1,126 @@
+<html lang="en">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+  <link rel="stylesheet"
+        href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.css" />
+
+
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+          integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+          integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+          crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+          integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+          crossorigin="anonymous"></script>
+
+  <!-- Angular Material requires Angular.js Libraries -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script>
+
+  <!-- fontawesome-->
+  <script src="https://kit.fontawesome.com/33cd24ebe2.js" crossorigin="anonymous"></script>
+
+  <!-- Angular Material Library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.js"></script>
+
+  <script src="app.js"></script>
+  <script src="controller/MainController.js"></script>
+
+</head>
+
+<body ng-app="OnlineOrganizer" ng-controller="MainController">
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 m-0 p-0">
+      <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand font-weight-bold" href="/">Online Organizer</a>
+        <form class="form-inline my-2 my-lg-0 ml-auto">
+          <a href="https://github.com/Thamaltw97"><h1><span class="fa fa-github"></span></h1></a>
+        </form>
+      </nav>
+    </div>
+  </div>
+
+  <div class="row m-5">
+    <div class="col-md-10">
+      <div class="card">
+        <div class="card-header">
+          <span ng-if="expDate === 0"><b>Next Event Remainder :  Currently no events available</b></span>
+          <span ng-if="edited === true"><b>Next Event Remainder :  Please submit the pending event !</b></span>
+          <span ng-if="expDate !== 0 && edited === false"><b>Next Event Remainder :  {{nextEventRemainder}}</b></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row m-5 col-md-12 container-fluid">
+
+    <div class="col-md-6" >
+      <span class="h4">Add New Event</span>
+      <form class="mt-2">
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="name">Event Name :</label>
+            <input type="text" class="form-control form-control-sm" id="name" placeholder="Enter event name"
+                   ng-model="eName" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="date">Date :</label>
+            <input type="text" class="form-control form-control-sm" id="date" value="{{startDate | date:shortDate}}"
+                   disabled />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="time">Start Time :</label>
+            <input type="time" class="form-control form-control-sm" id="time" placeholder="Enter start time"
+                   ng-model="eTime" />
+          </div>
+        </div>
+        <div class="form-row">
+        </div>
+        <div class="form-row col-md-6">
+          <button type="button" class="btn btn-primary btn-md btn-block mt-2" ng-click="fnAddEvent()">
+            <span ng-if="!edited">Submit</span>
+            <span ng-if="edited">Edit</span>
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="col-md-6">
+      <md-calendar ng-model="startDate" ng-change="fnHandleDate()"></md-calendar>
+    </div>
+  </div>
+
+  <div class="row m-5">
+    <div class="col-md-10">
+      <div class="card">
+        <div class="card-header">
+          <span>{{startDate | date:shortDate}}</span>
+        </div>
+        <ul class="list-group" ng-repeat="event in dateList">
+          <li class="list-group-item">
+            {{event.eTime}} | {{event.eName}}
+            <span class="text-danger float-right" ng-click="fnDeleteEvent(event.id)"><i
+                    class="fas fa-trash"></i></span>
+            <span class="text-success float-right mr-3" ng-click="fnEditEvent(event.id)"><i
+                    class="fas fa-pen"></i></span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+
+</html>

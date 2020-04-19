@@ -8,7 +8,7 @@ app.controller("MainController", ($scope, $filter) => {
 
   $scope.fnAddEvent = () => {
     if ($scope.eName === "" || $scope.eName === undefined || $scope.eTime === "" || $scope.eTime === undefined) {
-      alert('Fill the details correctly!');
+      alert("Fill the details correctly!");
     }
     else {
       $scope.mainList.push({
@@ -17,32 +17,35 @@ app.controller("MainController", ($scope, $filter) => {
         eDate: $filter("date")($scope.startDate),
         eTime: $filter("date")($scope.eTime, "HH:mm:ss"),
       });
+
       fnShowEvent();
       fnNextEvent();
       $scope.edited = false;
 
-      $scope.name = "";
-      //text box empty not working 
+      $scope.eName = "";
+      $scope.eTime = "";
 
     }
   };
 
-  $scope.fnEditEvent = (selectEventId) => {
-    const index = $scope.mainList.findIndex(event => event.id === selectEventId);
-    const selectEventObj = $scope.mainList[index];
+  $scope.fnEditEvent = (selectedId) => {
+    const index = $scope.mainList.findIndex(event => event.id === selectedId);
+    const selectedEvent = $scope.mainList[index];
+    $scope.mainList.splice(index, 1);
+
+    $scope.eName = selectedEvent.eName;
+    $scope.eTime = new Date("1000-10-10T" + selectedEvent.eTime);
+    $scope.edited = true;
+    fnShowEvent();
+    fnNextEvent();
+  }
+
+  $scope.fnDeleteEvent = (selectedId) => {
+    const index = $scope.mainList.findIndex(event => event.id === selectedId);
     $scope.mainList.splice(index, 1);
     fnShowEvent();
     fnNextEvent();
 
-    $scope.eName = selectEventObj.eName;
-    $scope.eTime = new Date("1000-10-10T" + selectEventObj.eTime);
-    $scope.edited = true;
-  }
-
-  $scope.fnDeleteEvent = (selectEventId) => {
-    const index = $scope.mainList.findIndex(event => event.id === selectEventId);
-    $scope.mainList.splice(index, 1);
-    fnShowEvent();
   }
 
   $scope.fnHandleDate = () => {
@@ -59,14 +62,13 @@ app.controller("MainController", ($scope, $filter) => {
     });
   };
 
-
   const fnNextEvent = () => {
     let eventExpList = [];
     $scope.mainList.map(event => {
-      eventExpList.push(new Date(event.eDate + ' ' + event.eTime).getTime());
+      eventExpList.push(new Date(event.eDate + " " + event.eTime).getTime());
     });
     $scope.expDate = eventExpList[eventExpList.indexOf(Math.min(...eventExpList))];
-    $scope.nextEventRemainder = $filter("date")(new Date($scope.expDate)) + ' ' + $filter("date")(new Date($scope.expDate), "HH:mm:ss")
+    $scope.nextEventRemainder = $filter("date")(new Date($scope.expDate)) + " " + $filter("date")(new Date($scope.expDate), "HH:mm:ss")
     $scope.expDate = $scope.expDate / 1000; //(seconds = milliseconds/1000)
   }
 
